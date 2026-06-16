@@ -1,3 +1,7 @@
+```javascript
+let pieChart;
+let trendChart;
+
 function calculateFootprint() {
 
     let electricity = parseFloat(document.getElementById("electricity").value);
@@ -12,12 +16,11 @@ function calculateFootprint() {
         travel = 0;
     }
 
-    // Emission calculations
     let electricityEmission = electricity * 0.92;
     let travelEmission = travel * 0.21;
+
     let totalEmission = electricityEmission + travelEmission;
 
-    // Grade system
     let grade = "";
     let status = "";
 
@@ -41,10 +44,14 @@ function calculateFootprint() {
     `;
 
     // Graph Bars
-    let barElectricity = document.getElementById("barElectricity");
-    let barTravel = document.getElementById("barTravel");
+    let barElectricity =
+        document.getElementById("barElectricity");
 
-    let maxEmission = Math.max(electricityEmission, travelEmission, 1);
+    let barTravel =
+        document.getElementById("barTravel");
+
+    let maxEmission =
+        Math.max(electricityEmission, travelEmission, 1);
 
     barElectricity.style.width =
         (electricityEmission / maxEmission * 100) + "%";
@@ -62,46 +69,118 @@ function calculateFootprint() {
     let tips = "";
 
     if (grade.includes("A")) {
-        tips = "🌱 Great job! Keep maintaining sustainable habits.";
+        tips =
+            "🌱 Great job! Keep maintaining sustainable habits.";
     }
     else if (grade.includes("B")) {
-        tips = "🚲 Consider using public transport and reducing energy usage.";
+        tips =
+            "🚲 Consider using public transport and reducing energy usage.";
     }
     else {
-        tips = "⚠ Reduce electricity consumption and travel emissions.";
+        tips =
+            "⚠ Reduce electricity consumption and travel emissions.";
     }
 
     document.getElementById("tips").innerHTML = tips;
 
     // History
-    let history = JSON.parse(localStorage.getItem("history")) || [];
+    let history =
+        JSON.parse(localStorage.getItem("history")) || [];
 
-    history.push(
-        `E:${electricity}, T:${travel}, Total:${totalEmission.toFixed(1)}`
+    history.push(totalEmission.toFixed(1));
+
+    localStorage.setItem(
+        "history",
+        JSON.stringify(history)
     );
 
-    localStorage.setItem("history", JSON.stringify(history));
-
     displayHistory();
+
+    createPieChart(
+        electricityEmission,
+        travelEmission
+    );
+
+    createTrendChart(history);
+}
+
+function createPieChart(electricity, travel) {
+
+    const ctx =
+        document.getElementById("emissionChart");
+
+    if (pieChart) {
+        pieChart.destroy();
+    }
+
+    pieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: [
+                "Electricity",
+                "Travel"
+            ],
+            datasets: [{
+                data: [
+                    electricity,
+                    travel
+                ]
+            }]
+        }
+    });
+}
+
+function createTrendChart(history) {
+
+    const ctx =
+        document.getElementById("trendChart");
+
+    if (trendChart) {
+        trendChart.destroy();
+    }
+
+    trendChart = new Chart(ctx, {
+        type: "line",
+        data: {
+            labels:
+                history.map(
+                    (_, index) =>
+                        "Run " + (index + 1)
+                ),
+            datasets: [{
+                label:
+                    "Carbon Footprint",
+                data: history
+            }]
+        }
+    });
 }
 
 function displayHistory() {
 
-    let history = JSON.parse(localStorage.getItem("history")) || [];
+    let history =
+        JSON.parse(
+            localStorage.getItem("history")
+        ) || [];
 
-    let historyList = document.getElementById("historyList");
+    let historyList =
+        document.getElementById("historyList");
 
     historyList.innerHTML = "";
 
     history.forEach(item => {
 
-        let li = document.createElement("li");
+        let li =
+            document.createElement("li");
 
-        li.textContent = item;
+        li.textContent =
+            item + " kg CO₂";
 
         historyList.appendChild(li);
 
     });
+
+    createTrendChart(history);
 }
 
 function clearHistory() {
@@ -109,6 +188,41 @@ function clearHistory() {
     localStorage.removeItem("history");
 
     displayHistory();
+
+    document.getElementById("historyList")
+        .innerHTML = "";
+}
+
+function toggleDarkMode() {
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+}
+
+function downloadReport() {
+
+    let report =
+        document.getElementById("result")
+            .innerText;
+
+    let blob =
+        new Blob(
+            [report],
+            { type: "text/plain" }
+        );
+
+    let link =
+        document.createElement("a");
+
+    link.href =
+        URL.createObjectURL(blob);
+
+    link.download =
+        "carbon_report.txt";
+
+    link.click();
 }
 
 window.onload = displayHistory;
+```

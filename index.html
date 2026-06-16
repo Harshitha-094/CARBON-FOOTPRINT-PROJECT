@@ -1,4 +1,5 @@
-v<!DOCTYPE html>
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +7,9 @@ v<!DOCTYPE html>
     <title>Carbon Footprint Tracker</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -16,36 +20,47 @@ v<!DOCTYPE html>
 
     <p>Track your environmental impact easily</p>
 
-    <label for="electricity">Electricity (kWh):</label>
+    <label for="electricity">Electricity Usage (kWh)</label>
     <input
         type="number"
         id="electricity"
         placeholder="Enter electricity usage"
         min="0"
+        aria-label="Electricity Usage"
     >
 
-    <label for="travel">Travel (km):</label>
+    <label for="travel">Travel Distance (km)</label>
     <input
         type="number"
         id="travel"
         placeholder="Enter travel distance"
         min="0"
+        aria-label="Travel Distance"
     >
 
-    <button onclick="calculateFootprint()">
-        Calculate
-    </button>
+    <div class="button-group">
+        <button onclick="calculateFootprint()">
+            Calculate
+        </button>
 
-    <button onclick="clearHistory()">
-        Clear History
-    </button>
+        <button onclick="clearHistory()">
+            Clear History
+        </button>
+
+        <button onclick="toggleDarkMode()">
+            🌙 Dark Mode
+        </button>
+
+        <button onclick="downloadReport()">
+            📥 Download Report
+        </button>
+    </div>
 
     <h2 id="result"></h2>
 
-    <!-- ECO TIPS -->
     <p id="tips"></p>
 
-    <!-- EMISSION GRAPH -->
+    <!-- Graph -->
     <div class="graph">
         <h3>📊 Emission Breakdown</h3>
 
@@ -54,16 +69,28 @@ v<!DOCTYPE html>
         <div id="barTravel"></div>
     </div>
 
-    <!-- HISTORY -->
+    <!-- Pie Chart -->
+    <div class="chart-section">
+        <h3>🥧 Emission Distribution</h3>
+        <canvas id="emissionChart"></canvas>
+    </div>
+
+    <!-- Trend Graph -->
+    <div class="chart-section">
+        <h3>📈 Carbon Trend</h3>
+        <canvas id="trendChart"></canvas>
+    </div>
+
+    <!-- History -->
     <div class="history">
-        <h3>📝 History</h3>
+        <h3>📝 Calculation History</h3>
 
         <ul id="historyList"></ul>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <hr>
+
         <p>
             🌱 Carbon Footprint Awareness Platform
             <br>
@@ -77,3 +104,4 @@ v<!DOCTYPE html>
 
 </body>
 </html>
+```
