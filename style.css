@@ -42,16 +42,15 @@ button:hover {
 }
 
 .graph div {
-    min-height: 40px;
-    margin: 8px 0;
-    padding: 0 12px;
+    min-height: 45px;
+    margin: 10px auto;
+    padding: 10px 15px;
+    border-radius: 8px;
     color: white;
     font-weight: bold;
-    border-radius: 8px;
     display: flex;
     align-items: center;
     white-space: nowrap;
-    overflow: visible;
     box-sizing: border-box;
 }
 }
