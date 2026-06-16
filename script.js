@@ -23,18 +23,15 @@ function calculateFootprint() {
     let barElectricity = document.getElementById("barElectricity");
     let barTravel = document.getElementById("barTravel"); 
 
-    barElectricity.style.width =
-        Math.max(electricityEmission * 2, 150) + "px";
+    barElectricity.style.width = "250px";
 
-    barTravel.style.width =
-        Math.max(eCarbon * 2, 250) + "px";
+    barTravel.style.width = "250px";
 
     barElectricity.innerHTML =
-        `Electricity: ${eCarbon.toFixed(1)} kg CO₂`;
+         `⚡ Electricity: ${eCarbon.toFixed(1)} kg CO₂`;
 
     barTravel.innerHTML =
-        `Travel: ${tCarbon.toFixed(1)} kg CO₂`;
-
+         `🚗 Travel: ${tCarbon.toFixed(1)} kg CO₂`;
     // Save history
     let history = JSON.parse(localStorage.getItem("history")) || [];
     history.push(
