@@ -1,0 +1,64 @@
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg, #d4fc79, #96e6a1);
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: darkgreen;
+}
+
+#result {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.graph div {
+    height: 25px;
+    margin: 5px;
+    color: white;
+    text-align: left;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+#barElectricity {
+    background: #2e7d32;
+}
+
+#barTravel {
+    background: #f57c00;
+}
+
+.history {
+    text-align: left;
+    margin-top: 20px;
+}
