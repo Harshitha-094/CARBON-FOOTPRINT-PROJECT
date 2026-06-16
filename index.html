@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -16,96 +16,64 @@
 
     <p>Track your environmental impact easily</p>
 
-    <label>Electricity (kWh):</label>
-    <input type="number" id="electricity">
+    <label for="electricity">Electricity (kWh):</label>
+    <input
+        type="number"
+        id="electricity"
+        placeholder="Enter electricity usage"
+        min="0"
+    >
 
-    <label>Travel (km):</label>
-    <input type="number" id="travel">
+    <label for="travel">Travel (km):</label>
+    <input
+        type="number"
+        id="travel"
+        placeholder="Enter travel distance"
+        min="0"
+    >
 
-    <button onclick="calculateFootprint()">Calculate</button>
+    <button onclick="calculateFootprint()">
+        Calculate
+    </button>
 
-    <button onclick="clearHistory()">Clear History</button>
+    <button onclick="clearHistory()">
+        Clear History
+    </button>
 
     <h2 id="result"></h2>
 
-    <!-- GRAPH -->
+    <!-- ECO TIPS -->
+    <p id="tips"></p>
+
+    <!-- EMISSION GRAPH -->
     <div class="graph">
         <h3>📊 Emission Breakdown</h3>
+
         <div id="barElectricity"></div>
+
         <div id="barTravel"></div>
     </div>
 
     <!-- HISTORY -->
     <div class="history">
         <h3>📝 History</h3>
+
         <ul id="historyList"></ul>
     </div>
 
+    <!-- FOOTER -->
+    <footer>
+        <hr>
+        <p>
+            🌱 Carbon Footprint Awareness Platform
+            <br>
+            Developed by Harshitha
+        </p>
+    </footer>
+
 </div>
 
-<script>
-function calculateFootprint() {
-
-    let electricity = Number(document.getElementById("electricity").value);
-    let travel = Number(document.getElementById("travel").value);
-
-    if (!electricity || electricity <= 0) {
-        alert("Enter valid electricity value");
-        return;
-    }
-
-    travel = travel || 0;
-
-    let eCarbon = electricity * 0.92;
-    let tCarbon = travel * 0.21;
-    let total = eCarbon + tCarbon;
-
-    let grade = "";
-
-    if (total < 100) grade = "🟢 A";
-    else if (total < 250) grade = "🟡 B";
-    else grade = "🔴 C";
-
-    document.getElementById("result").innerHTML =
-        `Total: ${total.toFixed(2)} kg CO₂/month <br> Grade: ${grade}`;
-
-    // GRAPH
-    document.getElementById("barElectricity").style.width = eCarbon + "px";
-    document.getElementById("barElectricity").innerText = "Electricity: " + eCarbon.toFixed(1);
-
-    document.getElementById("barTravel").style.width = tCarbon + "px";
-    document.getElementById("barTravel").innerText = "Travel: " + tCarbon.toFixed(1);
-
-    // HISTORY
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-
-    history.push(`E:${electricity}, T:${travel}, Total:${total.toFixed(1)}`);
-
-    localStorage.setItem("history", JSON.stringify(history));
-
-    updateHistory();
-}
-
-function updateHistory() {
-    let history = JSON.parse(localStorage.getItem("history")) || [];
-    let list = document.getElementById("historyList");
-
-    list.innerHTML = "";
-
-    history.forEach(item => {
-        let li = document.createElement("li");
-        li.innerText = item;
-        list.appendChild(li);
-    });
-}
-
-function clearHistory() {
-    localStorage.removeItem("history");
-    updateHistory();
-}
-
-updateHistory();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
