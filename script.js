@@ -1,87 +1,71 @@
 ```javascript
-let pieChart;
-let trendChart;
+let pieChart = null;
+let trendChart = null;
 
 function calculateFootprint() {
 
-    let electricity = parseFloat(document.getElementById("electricity").value);
-    let travel = parseFloat(document.getElementById("travel").value);
+    const electricity =
+        parseFloat(document.getElementById("electricity").value) || 0;
 
-    if (isNaN(electricity) || electricity < 0) {
+    const travel =
+        parseFloat(document.getElementById("travel").value) || 0;
+
+    if (electricity <= 0) {
         alert("Please enter a valid electricity value.");
         return;
     }
 
-    if (isNaN(travel) || travel < 0) {
-        travel = 0;
-    }
-
-    let electricityEmission = electricity * 0.92;
-    let travelEmission = travel * 0.21;
-
-    let totalEmission = electricityEmission + travelEmission;
+    const electricityEmission = electricity * 0.92;
+    const travelEmission = travel * 0.21;
+    const totalEmission = electricityEmission + travelEmission;
 
     let grade = "";
-    let status = "";
+    let tips = "";
 
     if (totalEmission < 100) {
-        grade = "🟢 A";
-        status = "Excellent Environmental Impact";
+        grade = "🟢 Grade A";
+        tips = "🌱 Great job! Keep maintaining sustainable habits.";
     }
     else if (totalEmission < 250) {
-        grade = "🟡 B";
-        status = "Moderate Environmental Impact";
+        grade = "🟡 Grade B";
+        tips = "🚲 Consider using public transport and reducing energy usage.";
     }
     else {
-        grade = "🔴 C";
-        status = "High Environmental Impact";
+        grade = "🔴 Grade C";
+        tips = "⚠ Reduce electricity consumption and travel emissions.";
     }
 
-    document.getElementById("result").innerHTML = `
-        Total: ${totalEmission.toFixed(2)} kg CO₂/month <br>
-        Grade: ${grade} <br>
-        ${status}
-    `;
+    document.getElementById("result").innerHTML =
+        `
+        <strong>Total Carbon Footprint:</strong>
+        ${totalEmission.toFixed(2)} kg CO₂/month
+        <br>
+        <strong>${grade}</strong>
+        `;
+
+    document.getElementById("tips").innerHTML = tips;
 
     // Graph Bars
-    let barElectricity =
+    const barElectricity =
         document.getElementById("barElectricity");
 
-    let barTravel =
+    const barTravel =
         document.getElementById("barTravel");
 
-    let maxEmission =
+    const maxValue =
         Math.max(electricityEmission, travelEmission, 1);
 
     barElectricity.style.width =
-        (electricityEmission / maxEmission * 100) + "%";
+        (electricityEmission / maxValue * 100) + "%";
 
     barTravel.style.width =
-        (travelEmission / maxEmission * 100) + "%";
+        (travelEmission / maxValue * 100) + "%";
 
     barElectricity.innerHTML =
         `⚡ Electricity: ${electricityEmission.toFixed(1)} kg CO₂`;
 
     barTravel.innerHTML =
         `🚗 Travel: ${travelEmission.toFixed(1)} kg CO₂`;
-
-    // Eco Tips
-    let tips = "";
-
-    if (grade.includes("A")) {
-        tips =
-            "🌱 Great job! Keep maintaining sustainable habits.";
-    }
-    else if (grade.includes("B")) {
-        tips =
-            "🚲 Consider using public transport and reducing energy usage.";
-    }
-    else {
-        tips =
-            "⚠ Reduce electricity consumption and travel emissions.";
-    }
-
-    document.getElementById("tips").innerHTML = tips;
 
     // History
     let history =
@@ -106,14 +90,16 @@ function calculateFootprint() {
 
 function createPieChart(electricity, travel) {
 
-    const ctx =
+    const canvas =
         document.getElementById("emissionChart");
+
+    if (!canvas) return;
 
     if (pieChart) {
         pieChart.destroy();
     }
 
-    pieChart = new Chart(ctx, {
+    pieChart = new Chart(canvas, {
         type: "pie",
         data: {
             labels: [
@@ -132,24 +118,24 @@ function createPieChart(electricity, travel) {
 
 function createTrendChart(history) {
 
-    const ctx =
+    const canvas =
         document.getElementById("trendChart");
+
+    if (!canvas || history.length === 0) return;
 
     if (trendChart) {
         trendChart.destroy();
     }
 
-    trendChart = new Chart(ctx, {
+    trendChart = new Chart(canvas, {
         type: "line",
         data: {
             labels:
                 history.map(
-                    (_, index) =>
-                        "Run " + (index + 1)
+                    (_, index) => "Run " + (index + 1)
                 ),
             datasets: [{
-                label:
-                    "Carbon Footprint",
+                label: "Carbon Footprint",
                 data: history
             }]
         }
@@ -158,61 +144,57 @@ function createTrendChart(history) {
 
 function displayHistory() {
 
-    let history =
-        JSON.parse(
-            localStorage.getItem("history")
-        ) || [];
+    const history =
+        JSON.parse(localStorage.getItem("history")) || [];
 
-    let historyList =
+    const historyList =
         document.getElementById("historyList");
+
+    if (!historyList) return;
 
     historyList.innerHTML = "";
 
     history.forEach(item => {
 
-        let li =
+        const li =
             document.createElement("li");
 
         li.textContent =
             item + " kg CO₂";
 
         historyList.appendChild(li);
-
     });
-
-    createTrendChart(history);
 }
 
 function clearHistory() {
 
     localStorage.removeItem("history");
 
-    displayHistory();
+    document.getElementById("historyList").innerHTML = "";
 
-    document.getElementById("historyList")
-        .innerHTML = "";
+    if (trendChart) {
+        trendChart.destroy();
+        trendChart = null;
+    }
 }
 
 function toggleDarkMode() {
 
-    document.body.classList.toggle(
-        "dark-mode"
-    );
+    document.body.classList.toggle("dark-mode");
 }
 
 function downloadReport() {
 
-    let report =
-        document.getElementById("result")
-            .innerText;
+    const report =
+        document.getElementById("result").innerText;
 
-    let blob =
+    const blob =
         new Blob(
             [report],
             { type: "text/plain" }
         );
 
-    let link =
+    const link =
         document.createElement("a");
 
     link.href =
@@ -224,5 +206,7 @@ function downloadReport() {
     link.click();
 }
 
-window.onload = displayHistory;
+window.onload = function () {
+    displayHistory();
+};
 ```
