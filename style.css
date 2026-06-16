@@ -42,12 +42,18 @@ button:hover {
 }
 
 .graph div {
-    height: 25px;
-    margin: 5px;
+    min-height: 40px;
+    margin: 8px 0;
+    padding: 0 12px;
     color: white;
-    text-align: left;
-    padding-left: 10px;
-    border-radius: 5px;
+    font-weight: bold;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: visible;
+    box-sizing: border-box;
+}
 }
 
 #barElectricity {
