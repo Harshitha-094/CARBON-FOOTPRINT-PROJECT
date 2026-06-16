@@ -1,4 +1,3 @@
-```javascript
 let pieChart = null;
 let trendChart = null;
 
@@ -209,4 +208,3 @@ function downloadReport() {
 window.onload = function () {
     displayHistory();
 };
-```
